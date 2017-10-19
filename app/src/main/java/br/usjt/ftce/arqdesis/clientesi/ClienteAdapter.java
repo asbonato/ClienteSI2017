@@ -43,20 +43,26 @@ public class ClienteAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
-        LayoutInflater inflater = (LayoutInflater)
-                contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.linha_cliente, parent, false);
-        ImageView foto = (ImageView)view.findViewById(R.id.foto_cliente);
-        TextView nome = (TextView)view.findViewById(R.id.nome_cliente);
-        TextView detalhe = (TextView)view.findViewById(R.id.detalhe_cliente);
+        View view = convertView;
+        if(view == null) {
+            LayoutInflater inflater = (LayoutInflater)
+                    contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.linha_cliente, parent, false);
 
-        nome.setText(clientes[position].getNome());
-        detalhe.setText(String.format("%s - %s", clientes[position].getFone(),
+            ImageView foto = (ImageView) view.findViewById(R.id.foto_cliente);
+            TextView nome = (TextView) view.findViewById(R.id.nome_cliente);
+            TextView detalhe = (TextView) view.findViewById(R.id.detalhe_cliente);
+            ViewHolder viewHolder = new ViewHolder(foto, nome, detalhe);
+            view.setTag(viewHolder);
+        }
+
+        ViewHolder viewHolder = (ViewHolder)view.getTag();
+        viewHolder.getNome().setText(clientes[position].getNome());
+        viewHolder.getDetalhe().setText(String.format("%s - %s", clientes[position].getFone(),
                 clientes[position].getEmail()));
         Drawable drawable = Util.getDrawable(contexto, clientes[position].getFoto());
         System.out.println(clientes[position].getFoto());
-        foto.setImageDrawable(drawable);
+        viewHolder.getFoto().setImageDrawable(drawable);
 
         return view;
     }
